@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMain(m *testing.M) {
@@ -13,32 +15,21 @@ func TestMain(m *testing.M) {
 	os.Exit(result) // Exit with exit code from running tests.
 }
 
-func TestHelloWorld(t *testing.T) {
-	expectedMsg := "Hello, World"
-	t.Run("Testing Hello World", func(t *testing.T) {
-		msg := generateMessage()
-		if msg != expectedMsg {
-			t.Errorf("Expected '%s', but got '%s'", expectedMsg, msg)
-		}
-	})
-}
+func TestGenerateMessage(t *testing.T) {
+	testCases := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{"Hello World", "", "Hello, World"},
+		{"Hello Name", "Paul", "Hello, Paul"},
+		{"Hello Empty Name", "", "Hello, World"},
+	}
 
-func TestHelloName(t *testing.T) {
-	expectedMsg := "Hello, Paul"
-	t.Run("Testing Hello Name", func(t *testing.T) {
-		msg := generateMessage("Paul")
-		if msg != expectedMsg {
-			t.Errorf("Expected '%s', but got '%s'", expectedMsg, msg)
-		}
-	})
-}
-
-func TestHelloEmptyName(t *testing.T) {
-	expectedMsg := "Hello, World"
-	t.Run("Testing Hello Empty Name", func(t *testing.T) {
-		msg := generateMessage("")
-		if msg != expectedMsg {
-			t.Errorf("Expected '%s', but got '%s'", expectedMsg, msg)
-		}
-	})
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			msg := generateMessage(tc.input)
+			assert.Equal(t, tc.expected, msg)
+		})
+	}
 }
