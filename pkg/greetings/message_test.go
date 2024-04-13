@@ -1,7 +1,8 @@
-package main
+package greetings_test
 
 import (
 	"fmt"
+	"hello-ai-world/pkg/greetings"
 	"os"
 	"testing"
 
@@ -28,7 +29,7 @@ func TestGenerateMessage(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			msg := generateMessage(tc.input)
+			msg := greetings.Greeting{}.GenerateMessage(tc.input)
 			assert.Equal(t, tc.expected, msg)
 		})
 	}
