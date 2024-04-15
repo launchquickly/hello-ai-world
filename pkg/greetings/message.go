@@ -7,13 +7,10 @@ import (
 
 type Greeting struct{}
 
-func (g Greeting) GenerateMessage(args ...string) string {
-	for i := range args {
-		if strings.TrimSpace(args[i]) == "" {
-			continue
-		} else {
-			return fmt.Sprintf("Hello, %s", strings.Join(args[:], ", "))
-		}
+func (g Greeting) GenerateMessage(name string) string {
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return "Hello, World"
 	}
-	return "Hello, World"
+	return fmt.Sprintf("Hello, %s", name)
 }

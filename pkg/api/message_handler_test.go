@@ -15,20 +15,17 @@ func TestGenerateMessageHandler(t *testing.T) {
 			statusCode int
 			body       string
 		}{
-			{"GET with arguments", "/generateMessage?arg=Alice&arg=Bob", http.StatusOK, `{"message": "Hello, Alice"}`},
+			{"GET with single name value", "/generateMessage?name=Bob", http.StatusOK, `{"message": "Hello, Bob"}`},
+			{"GET with multiple name values, first one taken", "/generateMessage?name=Alice&arg=Bob", http.StatusOK, `{"message": "Hello, Alice"}`},
 			{"GET without arguments", "/generateMessage", http.StatusOK, `{"message": "Hello, World"}`},
-			{"GET with empty arguments", "/generateMessage?name=", http.StatusOK, `{"message": "Hello, World"}`},
+			{"GET with empty name", "/generateMessage?name=", http.StatusOK, `{"message": "Hello, World"}`},
+			{"GET with argument that isn't name", "/generateMessage?arg=", http.StatusOK, `{"message": "Hello, World"}`},
 		}
 
 		for _, tc := range testCases {
 			t.Run(tc.name, func(t *testing.T) {
 				// Setup a new request to the handler
-				var req *http.Request
-				if tc.url == "/generateMessage?arg=Alice&arg=Bob" {
-					req, _ = http.NewRequest("GET", tc.url, nil)
-				} else {
-					req, _ = http.NewRequest(http.MethodPost, tc.url, nil)
-				}
+				req, _ := http.NewRequest("GET", tc.url, nil)
 
 				// Create a ResponseRecorder which satisfies http.ResponseWriter to record the response.
 				rr := httptest.NewRecorder()
